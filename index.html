@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landing Page Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-bg: #0a0a0a;
+            --color-surface: #1a1a1a;
+            --color-accent: #ff6b6b;
+            --color-accent-2: #4ecdc4;
+            --color-text: #ffffff;
+            --color-text-muted: #a0a0a0;
+            --font-display: 'Playfair Display', serif;
+            --font-body: 'Work Sans', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* カスタムカーソル */
+        body {
+            cursor: none;
+        }
+
+        .cursor {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            border: 2px solid var(--color-accent);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.8;
+            transition: transform 0.1s ease;
+        }
+
+        a, button {
+            cursor: none;
+        }
+
+        /* グレインテクスチャ */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.05"/></svg>');
+            pointer-events: none;
+            z-index: 10000;
+            opacity: 0.8;
+        }
+
+        /* ヘッダー */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 2rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: linear-gradient(to bottom, rgba(10, 10, 10, 0.95), transparent);
+            animation: slideDown 1s ease-out;
+        }
+
+        .site-title {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+        }
+
+        .nav-info {
+            font-size: 0.9rem;
+            color: var(--color-text-muted);
+            letter-spacing: 0.1em;
+        }
+
+        /* ヒーローセクション */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(255, 107, 107, 0.1), transparent 70%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(4rem, 12vw, 10rem);
+            font-weight: 700;
+            text-align: center;
+            line-height: 0.9;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 2;
+            background: linear-gradient(135deg, #ffffff, #a0a0a0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: fadeInUp 1.2s ease-out 0.3s forwards;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            font-weight: 300;
+            letter-spacing: 0.3em;
+            color: var(--color-text-muted);
+            text-align: center;
+            margin-bottom: 4rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1.2s ease-out 0.6s forwards;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.85rem;
+            letter-spacing: 0.2em;
+            color: var(--color-text-muted);
+            opacity: 0;
+            animation: fadeInUp 1.2s ease-out 1s forwards, float 3s ease-in-out infinite;
+        }
+
+        .scroll-indicator::after {
+            content: '↓';
+            display: block;
+            text-align: center;
+            margin-top: 0.5rem;
+            font-size: 1.5rem;
+        }
+
+        /* プロジェクトグリッド */
+        .projects {
+            padding: 8rem 5%;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            margin-bottom: 5rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s ease-out forwards;
+        }
+
+        .section-label {
+            font-size: 0.85rem;
+            letter-spacing: 0.3em;
+            color: var(--color-accent);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 600;
+            line-height: 1.1;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 4rem;
+        }
+
+        .project-card {
+            position: relative;
+            aspect-ratio: 16/10;
+            overflow: hidden;
+            background: var(--color-surface);
+            border-radius: 4px;
+            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            opacity: 0;
+            transform: translateY(50px) scale(0.95);
+            animation: fadeInScale 1s ease-out forwards;
+        }
+
+        .project-card:nth-child(1) { animation-delay: 0.2s; }
+        .project-card:nth-child(2) { animation-delay: 0.4s; }
+        .project-card:nth-child(3) { animation-delay: 0.6s; }
+
+        .project-card:hover {
+            transform: translateY(-10px) scale(1.02);
+        }
+
+        .project-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease, filter 0.6s ease;
+        }
+
+        .project-card:hover .project-image {
+            transform: scale(1.1);
+            filter: brightness(0.6);
+        }
+
+        .project-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.8));
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 3rem;
+            transition: background 0.6s ease;
+        }
+
+        .project-card:hover .project-overlay {
+            background: linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0.9));
+        }
+
+        .project-category {
+            font-size: 0.8rem;
+            letter-spacing: 0.2em;
+            color: var(--color-accent);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .project-card:hover .project-category {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: 0.1s;
+        }
+
+        .project-title {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .project-description {
+            font-size: 1rem;
+            font-weight: 300;
+            color: var(--color-text-muted);
+            line-height: 1.6;
+            max-width: 80%;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .project-card:hover .project-description {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: 0.2s;
+        }
+
+        .project-link {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+        }
+
+        .project-tags {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .project-card:hover .project-tags {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: 0.3s;
+        }
+
+        .tag {
+            font-size: 0.75rem;
+            padding: 0.4rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            letter-spacing: 0.1em;
+        }
+
+        /* Coming Soon カード */
+        .coming-soon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(78, 205, 196, 0.1));
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            cursor: default;
+        }
+
+        .coming-soon:hover {
+            transform: translateY(0) scale(1);
+        }
+
+        .coming-soon-text {
+            font-family: var(--font-display);
+            font-size: 3rem;
+            font-weight: 300;
+            letter-spacing: 0.1em;
+            color: var(--color-text-muted);
+        }
+
+        /* フッター */
+        footer {
+            padding: 5rem 5%;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-text {
+            font-size: 0.9rem;
+            color: var(--color-text-muted);
+            letter-spacing: 0.1em;
+        }
+
+        /* アニメーション */
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: translateY(50px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(-50%, 0);
+            }
+            50% {
+                transform: translate(-50%, -10px);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 0.5;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 4rem;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .project-card {
+                aspect-ratio: 4/5;
+            }
+
+            .project-title {
+                font-size: 2rem;
+            }
+
+            .section-title {
+                font-size: 2.5rem;
+            }
+
+            body {
+                cursor: auto;
+            }
+
+            .cursor {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- カスタムカーソル -->
+    <div class="cursor"></div>
+
+    <!-- ヘッダー -->
+    <header>
+        <div class="site-title">Portfolio</div>
+        <div class="nav-info">Landing Pages</div>
+    </header>
+
+    <!-- ヒーロー -->
+    <section class="hero">
+        <div class="hero-background"></div>
+        <h1 class="hero-title">CREATIVE<br>LANDING<br>PAGES</h1>
+        <p class="hero-subtitle">WEBサイトデザイン作品集</p>
+        <div class="scroll-indicator">SCROLL</div>
+    </section>
+
+    <!-- プロジェクト -->
+    <section class="projects">
+        <div class="section-header">
+            <div class="section-label">Selected Works</div>
+            <h2 class="section-title">ランディングページ<br>コレクション</h2>
+        </div>
+
+        <div class="projects-grid">
+            <!-- LUMIÈRE プロジェクト -->
+            <div class="project-card">
+                <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1200&q=80" alt="LUMIÈRE" class="project-image">
+                <div class="project-overlay">
+                    <div class="project-category">Beauty Salon</div>
+                    <h3 class="project-title">LUMIÈRE</h3>
+                    <p class="project-description">白を基調とした清潔感のあるエレガントな美容院のランディングページ。洗練されたタイポグラフィとスムーズなアニメーションが特徴。</p>
+                    <div class="project-tags">
+                        <span class="tag">Minimal</span>
+                        <span class="tag">Elegant</span>
+                        <span class="tag">White</span>
+                    </div>
+                </div>
+                <a href="./sites/lumiere/index.html" class="project-link"></a>
+            </div>
+
+            <!-- TERRA BEANS プロジェクト -->
+            <div class="project-card">
+                <img src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=1200&q=80" alt="TERRA BEANS" class="project-image">
+                <div class="project-overlay">
+                    <div class="project-category">Coffee Shop</div>
+                    <h3 class="project-title">TERRA BEANS</h3>
+                    <p class="project-description">ベージュ・クリーム基調の温かみと上質さを兼ね備えたコーヒー豆販売サイト。ギフト需要を意識したエレガントなデザイン。</p>
+                    <div class="project-tags">
+                        <span class="tag">Elegant</span>
+                        <span class="tag">Gift</span>
+                        <span class="tag">Natural</span>
+                    </div>
+                </div>
+                <a href="./sites/coffee/index.html" class="project-link"></a>
+            </div>
+
+            <!-- Coming Soon 2 -->
+            <div class="project-card coming-soon">
+                <div class="coming-soon-text">Coming Soon</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- フッター -->
+    <footer>
+        <p class="footer-text">© 2025 Landing Page Portfolio. Crafted with passion.</p>
+    </footer>
+
+    <script>
+        // カスタムカーソル
+        const cursor = document.querySelector('.cursor');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.transform = `translate(${e.clientX - 7}px, ${e.clientY - 7}px)`;
+        });
+
+        // ホバー時のカーソル拡大
+        const hoverElements = document.querySelectorAll('.project-card:not(.coming-soon)');
+        hoverElements.forEach(elem => {
+            elem.addEventListener('mouseenter', () => {
+                cursor.style.transform = `translate(${event.clientX - 7}px, ${event.clientY - 7}px) scale(2)`;
+            });
+            elem.addEventListener('mouseleave', () => {
+                cursor.style.transform = `translate(${event.clientX - 7}px, ${event.clientY - 7}px) scale(1)`;
+            });
+        });
+
+        // スムーズスクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // スクロールインジケーターの非表示
+        window.addEventListener('scroll', () => {
+            const scrollIndicator = document.querySelector('.scroll-indicator');
+            if (window.scrollY > 100) {
+                scrollIndicator.style.opacity = '0';
+            } else {
+                scrollIndicator.style.opacity = '1';
+            }
+        });
+    </script>
+</body>
+</html>
