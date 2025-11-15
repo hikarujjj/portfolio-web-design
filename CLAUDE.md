@@ -11,9 +11,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```
 /landing-page/
 ├── index.html           # メインポートフォリオページ（ダークモード）
-├── lumiere/
-│   └── index.html      # LUMIÈRE美容院ランディングページ（ホワイトテーマ）
-└── other-landing-page/ 
+├── sites/
+│   ├── lumiere/
+│   │   └── index.html      # LUMIÈRE美容院ランディングページ（ホワイトテーマ）
+│   ├── cafe/
+│   │   └── index.html      # SUNNY SIDE CAFEランディングページ（ホワイトテーマ）
+│   ├── candy/
+│   │   └── index.html      # CANDYガラスコップ販売ランディングページ（パステルテーマ）
+│   └── ...                # 将来
+└── CLAUDE.md          # このガイドラインファイル
 ```
 
 ### 各ランディングページの特徴
