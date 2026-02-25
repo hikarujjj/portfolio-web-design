@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SUNNY SIDE CAFE — Design Showcase</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ===== サイト変数（index.htmlと同一） ===== */
+        :root {
+            --color-primary: #FDB71A;
+            --color-secondary: #FF9F43;
+            --color-accent: #FF6B6B;
+            --color-bg: #FFFBF5;
+            --color-bg-light: #FFFFFF;
+            --color-text: #2D3436;
+            --color-text-light: #636E72;
+            --color-text-lighter: #B2BEC3;
+            --font-display: 'Outfit', sans-serif;
+            --font-body: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        /* ===== Showcase専用レイアウト ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-body);
+            background: #f0f0f0;
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+
+        /* ショーケースのヘッダーバー */
+        .showcase-header {
+            background: var(--color-text);
+            color: white;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .showcase-title {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .showcase-title span {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .back-link {
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+        .back-link:hover { color: white; }
+
+        /* サイドナビ */
+        .showcase-layout {
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            min-height: calc(100vh - 60px);
+        }
+
+        .showcase-nav {
+            background: white;
+            border-right: 1px solid #e8e8e8;
+            padding: 2rem 0;
+            position: sticky;
+            top: 60px;
+            height: calc(100vh - 60px);
+            overflow-y: auto;
+        }
+
+        .showcase-nav-section {
+            padding: 0.5rem 1.5rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--color-text-lighter);
+            margin-top: 1.5rem;
+        }
+
+        .showcase-nav a {
+            display: block;
+            padding: 0.5rem 1.5rem;
+            font-size: 0.9rem;
+            color: var(--color-text-light);
+            text-decoration: none;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .showcase-nav a:hover {
+            color: var(--color-primary);
+            border-left-color: var(--color-primary);
+            background: rgba(253, 183, 26, 0.05);
+        }
+
+        /* メインコンテンツ */
+        .showcase-main {
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            gap: 4rem;
+        }
+
+        /* セクションブロック */
+        .showcase-section {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+
+        .showcase-section-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: baseline;
+            gap: 1rem;
+        }
+
+        .showcase-section-name {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-text);
+        }
+
+        .showcase-section-desc {
+            font-size: 0.85rem;
+            color: var(--color-text-lighter);
+        }
+
+        .showcase-section-body {
+            padding: 2rem;
+        }
+
+        /* コンポーネントラベル */
+        .component-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--color-text-lighter);
+            margin-bottom: 0.75rem;
+        }
+
+        .component-group {
+            margin-bottom: 2.5rem;
+        }
+        .component-group:last-child { margin-bottom: 0; }
+
+        .component-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+
+        .component-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .component-item-label {
+            font-size: 0.75rem;
+            color: var(--color-text-lighter);
+            font-family: monospace;
+        }
+
+        /* ===== 1. カラーパレット ===== */
+        .color-swatches {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .color-swatch {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .color-box {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            border: 1px solid rgba(0,0,0,0.06);
+        }
+
+        .color-name {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .color-value {
+            font-size: 0.75rem;
+            color: var(--color-text-lighter);
+            font-family: monospace;
+        }
+
+        /* ===== 2. タイポグラフィ ===== */
+        .type-specimen {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .type-specimen:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+        .type-meta {
+            font-size: 0.75rem;
+            font-family: monospace;
+            color: var(--color-text-lighter);
+            margin-bottom: 0.5rem;
+        }
+
+        /* ===== サイト本来のコンポーネント（index.htmlから流用） ===== */
+
+        /* ボタン */
+        .btn {
+            padding: 1.2rem 2.5rem;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            font-weight: 700;
+            text-decoration: none;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            color: white;
+            box-shadow: 0 10px 30px rgba(253, 183, 26, 0.3);
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(253, 183, 26, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--color-text);
+            border: 2px solid var(--color-text);
+        }
+        .btn-secondary:hover {
+            background: var(--color-text);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        /* ヒーローラベル */
+        .hero-label {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            border-radius: 50px;
+        }
+
+        /* セクションラベル */
+        .section-label {
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--color-primary);
+        }
+
+        /* セクションヘッダー */
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+            color: var(--color-text);
+            margin-bottom: 1.5rem;
+        }
+
+        .section-description {
+            font-size: 1.1rem;
+            color: var(--color-text-light);
+            line-height: 1.8;
+        }
+
+        /* カテゴリバッジ（メニューカード内） */
+        .menu-item-category {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            background: linear-gradient(135deg, rgba(253, 183, 26, 0.1), rgba(255, 159, 67, 0.1));
+            color: var(--color-primary);
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            border-radius: 20px;
+        }
+
+        /* メニューカード */
+        .menu-item {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.5s ease;
+            border: 2px solid transparent;
+            max-width: 320px;
+        }
+        .menu-item:hover {
+            transform: translateY(-10px);
+            border-color: var(--color-primary);
+            box-shadow: 0 20px 50px rgba(253, 183, 26, 0.2);
+        }
+        .menu-item-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+        .menu-item:hover .menu-item-image { transform: scale(1.1); }
+        .menu-item-content { padding: 1.5rem; }
+        .menu-item-name {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin: 0.5rem 0 0.5rem;
+        }
+        .menu-item-description {
+            font-size: 0.9rem;
+            color: var(--color-text-light);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        .menu-item-price {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        /* ヒーローバッジ */
+        .hero-badge {
+            display: inline-block;
+            background: white;
+            padding: 1.5rem 2rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(45, 52, 54, 0.1);
+        }
+        .hero-badge-number {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--color-primary);
+        }
+        .hero-badge-text {
+            font-size: 0.85rem;
+            color: var(--color-text-light);
+            font-weight: 600;
+        }
+
+        /* ナビゲーション（スタティック表示用） */
+        .navbar-demo {
+            background: rgba(255, 251, 245, 0.95);
+            padding: 1.2rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 12px;
+            border: 1px solid #eee;
+        }
+        .logo {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        .nav-links a {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--color-text);
+            text-decoration: none;
+        }
+
+        /* コンタクトアイコン */
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+        }
+
+        /* コンタクト詳細 */
+        .contact-detail {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            background: var(--color-text);
+            padding: 1.5rem;
+            border-radius: 12px;
+            max-width: 360px;
+            color: white;
+        }
+        .contact-detail-content h4 {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+        .contact-detail-content p {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.7);
+        }
+
+        /* 営業時間アイテム */
+        .hours-demo {
+            background: var(--color-text);
+            border-radius: 12px;
+            overflow: hidden;
+            max-width: 360px;
+        }
+        .hours-demo-title {
+            padding: 1rem 1.5rem;
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 700;
+            color: white;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .hours-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8rem 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+        }
+        .hours-item:last-child { border-bottom: none; }
+        .hours-day { font-weight: 600; color: white; }
+        .hours-time { color: rgba(255, 255, 255, 0.7); }
+
+        /* ギャラリーアイテム */
+        .gallery-item-demo {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            cursor: pointer;
+            width: 200px;
+            height: 160px;
+        }
+        .gallery-item-demo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+        .gallery-item-demo:hover img { transform: scale(1.1); }
+        .gallery-item-demo::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(253, 183, 26, 0.6), rgba(255, 159, 67, 0.6));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .gallery-item-demo:hover::before { opacity: 1; }
+
+        /* アニメーション表示 */
+        .animation-demo {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        .anim-box {
+            width: 120px;
+            height: 80px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: white;
+            cursor: pointer;
+        }
+        .anim-box.fade-up { animation: fadeInUp 1s ease-out; }
+        .anim-box.float-anim { animation: float 4s ease-in-out infinite; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(0, -12px); }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ショーケースヘッダー -->
+<header class="showcase-header">
+    <div class="showcase-title">
+        <span>SUNNY SIDE CAFE</span> — Design Showcase
+    </div>
+    <a href="./index.html" class="back-link">← 実際のサイトを見る</a>
+</header>
+
+<div class="showcase-layout">
+
+    <!-- サイドナビ -->
+    <nav class="showcase-nav">
+        <div class="showcase-nav-section">基礎</div>
+        <a href="#colors">カラー</a>
+        <a href="#typography">タイポグラフィ</a>
+
+        <div class="showcase-nav-section">コンポーネント</div>
+        <a href="#navigation">ナビゲーション</a>
+        <a href="#buttons">ボタン</a>
+        <a href="#labels">ラベル / バッジ</a>
+        <a href="#section-header">セクションヘッダー</a>
+        <a href="#menu-card">メニューカード</a>
+        <a href="#hero-badge">ヒーローバッジ</a>
+        <a href="#gallery-item">ギャラリーアイテム</a>
+        <a href="#contact-detail">コンタクト詳細</a>
+        <a href="#hours">営業時間</a>
+
+        <div class="showcase-nav-section">モーション</div>
+        <a href="#animations">アニメーション</a>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <main class="showcase-main">
+
+        <!-- ① カラー -->
+        <section class="showcase-section" id="colors">
+            <div class="showcase-section-header">
+                <span class="showcase-section-name">カラーパレット</span>
+                <span class="showcase-section-desc">:root CSS変数で管理</span>
+            </div>
+            <div class="showcase-section-body">
+                <div class="color-swatches">
+                    <div class="color-swatch">
+                        <div class="color-box" style="background: #FDB71A;"></div>
+                        <div class="color-name">Primary</div>
+                        <div class="color-value">--color-primary<br>#FDB71A</div>
+                    </div>
+                    <div class="color-swatch">
+                        <div class="color-box" style="background: #FF9F43;"></div>
+                        <div class="color-name">Secondary</div>
+                        <div class="color-value">--color-secondary<br>#FF9F43</div>
+                    </div>
+                    <div class="color-swatch">
+                        <div class="color-box" style="background: #FF6B6B;"></div>
+                        <div class="color-name">Accent</div>
+                        <div class="color-value">--color-accent<br>#FF6B6B</div>
+                    </div>
+                    <div class="color-swatch">
+                        <div class="color-box" style="background: #FFFBF5; border: 1px solid #e0e0e0;"></div>
+                        <div class="color-name">Background</div>
+                        <div class="color-value">--color-bg<br>#FFFBF5</div>
+                    </div>
+                    <div class="color-swatch">
+                        <div class="color-box" style="background: #FFFFFF; border: 1px solid #e0e0e0;"></div>
+                        <div class="color-name">Background Light</div>
+                        <div class="color-value">--color-bg-light<br>#FFFFFF</div>
+                    </div>
+                    <div class="color-swatch">
+                        <div class="color-box" style="background: #2D3436;"></div>
+                        <div class="color-name">Text</div>
+                        <div class="color-value">--color-text<br>#2D3436</div>
+                    </div>
+                    <div class="color-swatch">
+                        <div class="color-box" style="background: #636E72;"></div>
+                        <div class="color-name">Text Light</div>
+                        <div class="color-value">--color-text-light<br>#636E72</div>
+                    </div>
+                    <div class="color-swatch">
+                        <div class="color-box" style="background: #B2BEC3;"></div>
+                        <div class="color-name">Text Lighter</div>
+                        <div class="color-value">--color-text-lighter<br>#B2BEC3</div>
+                    </div>
+                    <div class="color-swatch">
+                        <div class="color-box" style="background: linear-gradient(135deg, #FDB71A, #FF9F43);"></div>
+                        <div class="color-name">Gradient</div>
+                        <div class="color-value">primary → secondary<br>（ボタン・ロゴ等）</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ② タイポグラフィ -->
+        <section class="showcase-section" id="typography">
+            <div class="showcase-section-header">
+                <span class="showcase-section-name">タイポグラフィ</span>
+                <span class="showcase-section-desc">Outfit（見出し）+ Plus Jakarta Sans（本文）</span>
+            </div>
+            <div class="showcase-section-body">
+
+                <div class="type-specimen">
+                    <div class="type-meta">.hero-title — Outfit 800 / 5rem / letter-spacing: -0.03em</div>
+                    <div style="font-family: var(--font-display); font-size: 3.5rem; font-weight: 800; line-height: 1.1; letter-spacing: -0.03em;">Start Your Day<br>On The <span style="background: linear-gradient(135deg,#FDB71A,#FF9F43); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;">Sunny Side</span></div>
+                </div>
+
+                <div class="type-specimen">
+                    <div class="type-meta">.section-title — Outfit 800 / 3.5rem / letter-spacing: -0.02em</div>
+                    <div style="font-family: var(--font-display); font-size: 2.5rem; font-weight: 800; letter-spacing: -0.02em;">人気のメニュー</div>
+                </div>
+
+                <div class="type-specimen">
+                    <div class="type-meta">.menu-item-name — Outfit 700 / 1.8rem</div>
+                    <div style="font-family: var(--font-display); font-size: 1.5rem; font-weight: 700;">スペシャルティコーヒー</div>
+                </div>
+
+                <div class="type-specimen">
+                    <div class="type-meta">.section-label — Plus Jakarta Sans 700 / 0.9rem / letter-spacing: 0.15em / uppercase</div>
+                    <div style="font-size: 0.9rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--color-primary);">Our Menu</div>
+                </div>
+
+                <div class="type-specimen">
+                    <div class="type-meta">.hero-description — Plus Jakarta Sans 400 / 1.2rem / line-height: 1.8 / color: text-light</div>
+                    <div style="font-size: 1.1rem; color: var(--color-text-light); line-height: 1.8; max-width: 480px;">都会の真ん中で、太陽のような明るさと温かさを。厳選されたコーヒーと手作りのフードで、あなたの一日を特別なものに。</div>
+                </div>
+
+                <div class="type-specimen">
+                    <div class="type-meta">.menu-item-description — Plus Jakarta Sans 400 / 0.95rem / color: text-light</div>
+                    <div style="font-size: 0.9rem; color: var(--color-text-light); line-height: 1.6;">世界中から厳選した豆を、熟練バリスタが丁寧に抽出。</div>
+                </div>
+
+                <div class="type-specimen">
+                    <div class="type-meta">.menu-item-price — Outfit 700 / 1.5rem / color: primary</div>
+                    <div style="font-family: var(--font-display); font-size: 1.4rem; font-weight: 700; color: var(--color-primary);">¥550〜</div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ③ ナビゲーション -->
+        <section class="showcase-section" id="navigation">
+            <div class="showcase-section-header">
+                <span class="showcase-section-name">ナビゲーション</span>
+                <span class="showcase-section-desc">.navbar — 固定ヘッダー、backdrop-filter: blur(20px)</span>
+            </div>
+            <div class="showcase-section-body">
+                <div class="component-label">通常状態</div>
+                <div class="navbar-demo">
+                    <div class="logo">SUNNY SIDE</div>
+                    <ul class="nav-links">
+                        <li><a href="#">Menu</a></li>
+                        <li><a href="#">Gallery</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div style="margin-top: 1rem; font-size: 0.85rem; color: var(--color-text-lighter);">
+                    スクロール時: padding縮小 + box-shadow追加 (.navbar.scrolled)
+                </div>
+            </div>
+        </section>
+
+        <!-- ④ ボタン -->
+        <section class="showcase-section" id="buttons">
+            <div class="showcase-section-header">
+                <span class="showcase-section-name">ボタン</span>
+                <span class="showcase-section-desc">.btn + バリアント — border-radius: 50px（ピル型）</span>
+            </div>
+            <div class="showcase-section-body">
+                <div class="component-row">
+                    <div class="component-item">
+                        <div class="component-item-label">.btn-primary</div>
+                        <a href="#" class="btn btn-primary">メニューを見る</a>
+                    </div>
+                    <div class="component-item">
+                        <div class="component-item-label">.btn-secondary</div>
+                        <a href="#" class="btn btn-secondary">アクセス</a>
+                    </div>
+                </div>
+                <div style="margin-top: 1.5rem; font-size: 0.85rem; color: var(--color-text-lighter);">
+                    ホバー時: translateY(-3px) + box-shadow強化（どちらも共通）
+                </div>
+            </div>
+        </section>
+
+        <!-- ⑤ ラベル / バッジ -->
+        <section class="showcase-section" id="labels">
+            <div class="showcase-section-header">
+                <span class="showcase-section-name">ラベル / バッジ</span>
+                <span class="showcase-section-desc">ページ内の2種類のタグ要素</span>
+            </div>
+            <div class="showcase-section-body">
+                <div class="component-row">
+                    <div class="component-item">
+                        <div class="component-item-label">.hero-label（グラデーション・白文字）</div>
+                        <span class="hero-label">Modern Urban Cafe</span>
+                    </div>
+                    <div class="component-item">
+                        <div class="component-item-label">.menu-item-category（薄い背景・プライマリ色文字）</div>
+                        <span class="menu-item-category">Coffee</span>
+                        <span class="menu-item-category" style="margin-top:0.5rem;">Food</span>
+                        <span class="menu-item-category" style="margin-top:0.5rem;">Dessert</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ⑥ セクションヘッダー -->
+        <section class="showcase-section" id="section-header">
+            <div class="showcase-section-header">
+                <span class="showcase-section-name">セクションヘッダー</span>
+                <span class="showcase-section-desc">.section-header — 各セクションの冒頭に使用、中央揃え</span>
+            </div>
+            <div class="showcase-section-body">
+                <div style="text-align: center; max-width: 600px; margin: 0 auto;">
+                    <div class="section-label">Our Menu</div>
+                    <h2 class="section-title" style="font-size: 2.5rem; margin-top: 0.5rem;">人気のメニュー</h2>
+                    <p class="section-description">厳選されたスペシャルティコーヒーと、シェフが毎朝手作りするフレッシュなフード。一つひとつに想いを込めて。</p>
+                </div>
+                <div style="margin-top: 1.5rem; font-size: 0.85rem; color: var(--color-text-lighter);">
+                    構成: .section-label → .section-title → .section-description（この順番を守る）
+                </div>
+            </div>
+        </section>
+
+        <!-- ⑦ メニューカード -->
+        <section class="showcase-section" id="menu-card">
+            <div class="showcase-section-header">
+                <span class="showcase-section-name">メニューカード</span>
+                <span class="showcase-section-desc">.menu-item — ホバーで浮き上がり + 画像ズーム + ボーダー発光</span>
+            </div>
+            <div class="showcase-section-body">
+                <div class="component-row">
+                    <div class="component-item">
+                        <div class="component-item-label">.menu-item（ホバーしてみてください）</div>
+                        <div class="menu-item">
+                            <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&q=80" alt="Coffee" class="menu-item-image">
+                            <div class="menu-item-content">
+                                <span class="menu-item-category">Coffee</span>
+                                <h3 class="menu-item-name">スペシャルティコーヒー</h3>
+                                <p class="menu-item-description">世界中から厳選した豆を、熟練バリスタが丁寧に抽出。</p>
+                                <div class="menu-item-price">¥550〜</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top: 1.5rem; font-size: 0.85rem; color: var(--color-text-lighter);">
+                    構成: 画像(.menu-item-image) → カテゴリ(.menu-item-category) → 名前(.menu-item-name) → 説明(.menu-item-description) → 価格(.menu-item-price)
+                </div>
+            </div>
+        </section>
+
+        <!-- ⑧ ヒーローバッジ -->
+        <section class="showcase-section" id="hero-badge">
+            <div class="showcase-section-header">
+                <span class="showcase-section-name">ヒーローバッジ</span>
+                <span class="showcase-section-desc">.hero-badge — ヒーロー画像の左下に浮かせて配置</span>
+            </div>
+            <div class="showcase-section-body">
+                <div class="hero-badge">
+                    <div class="hero-badge-number">7:00</div>
+                    <div class="hero-badge-text">朝から営業</div>
+                </div>
+                <div style="margin-top: 1rem; font-size: 0.85rem; color: var(--color-text-lighter);">
+                    数字: .hero-badge-number（Outfit 800 / 2.5rem / primary色） + テキスト: .hero-badge-text
+                </div>
+            </div>
+        </section>
+
+        <!-- ⑨ ギャラリーアイテム -->
+        <section class="showcase-section" id="gallery-item">
+            <div class="showcase-section-header">
+                <span class="showcase-section-name">ギャラリーアイテム</span>
+                <span class="showcase-section-desc">.gallery-item — ホバーで画像ズーム + グラデーションオーバーレイ</span>
+            </div>
+            <div class="showcase-section-body">
+                <div class="component-row">
+                    <div class="component-item">
+                        <div class="component-item-label">.gallery-item（ホバーしてみてください）</div>
+                        <div class="gallery-item-demo">
+                            <img src="https://images.unsplash.com/photo-1559925393-8be0ec4767c8?w=400&q=80" alt="Gallery">
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top: 1rem; font-size: 0.85rem; color: var(--color-text-lighter);">
+                    実際のグリッドでは1番目と4番目のアイテムが複数セルを占有（大きく表示）
+                </div>
+            </div>
+        </section>
+
+        <!-- ⑩ コンタクト詳細 -->
+        <section class="showcase-section" id="contact-detail">
+            <div class="showcase-section-header">
+                <span class="showcase-section-name">コンタクト詳細</span>
+                <span class="showcase-section-desc">.contact-detail — ダーク背景セクション内で使用</span>
+            </div>
+            <div class="showcase-section-body">
+                <div class="component-row">
+                    <div class="component-item">
+                        <div class="component-item-label">.contact-detail</div>
+                        <div class="contact-detail">
+                            <div class="contact-icon">📍</div>
+                            <div class="contact-detail-content">
+                                <h4>住所</h4>
+                                <p>東京都渋谷区代々木<br>サニーサイドビル 1F</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="component-item">
+                        <div class="component-item-label">.contact-icon（グラデーション背景）</div>
+                        <div style="display:flex; gap:1rem;">
+                            <div class="contact-icon">📍</div>
+                            <div class="contact-icon">📞</div>
+                            <div class="contact-icon">✉️</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ⑪ 営業時間 -->
+        <section class="showcase-section" id="hours">
+            <div class="showcase-section-header">
+                <span class="showcase-section-name">営業時間</span>
+                <span class="showcase-section-desc">.hours-item — ダーク背景内のリスト</span>
+            </div>
+            <div class="showcase-section-body">
+                <div class="hours-demo">
+                    <div class="hours-demo-title">営業時間</div>
+                    <div class="hours-item">
+                        <span class="hours-day">月曜日 - 金曜日</span>
+                        <span class="hours-time">7:00 - 22:00</span>
+                    </div>
+                    <div class="hours-item">
+                        <span class="hours-day">土曜日</span>
+                        <span class="hours-time">8:00 - 23:00</span>
+                    </div>
+                    <div class="hours-item">
+                        <span class="hours-day">日曜日・祝日</span>
+                        <span class="hours-time">8:00 - 21:00</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ⑫ アニメーション -->
+        <section class="showcase-section" id="animations">
+            <div class="showcase-section-header">
+                <span class="showcase-section-name">アニメーション</span>
+                <span class="showcase-section-desc">ページで使用されているキーフレームパターン</span>
+            </div>
+            <div class="showcase-section-body">
+                <div class="component-group">
+                    <div class="component-label">fadeInUp — スクロール時フェードイン（IntersectionObserver）</div>
+                    <div class="animation-demo">
+                        <div>
+                            <div class="component-item-label">hero-label: delay 0.2s</div>
+                            <div class="anim-box fade-up" style="animation-delay:0.2s;">Label</div>
+                        </div>
+                        <div>
+                            <div class="component-item-label">hero-title: delay 0.4s</div>
+                            <div class="anim-box fade-up" style="animation-delay:0.4s;">Title</div>
+                        </div>
+                        <div>
+                            <div class="component-item-label">hero-desc: delay 0.6s</div>
+                            <div class="anim-box fade-up" style="animation-delay:0.6s;">Desc</div>
+                        </div>
+                        <div>
+                            <div class="component-item-label">hero-cta: delay 0.8s</div>
+                            <div class="anim-box fade-up" style="animation-delay:0.8s;">CTA</div>
+                        </div>
+                    </div>
+                    <div style="margin-top:0.75rem; font-size:0.85rem; color:var(--color-text-lighter);">ヒーローのスタガード: 0.2s刻みで順番に出現</div>
+                </div>
+
+                <div class="component-group">
+                    <div class="component-label">float — ヒーロー背景の浮遊装飾円（20sループ）</div>
+                    <div class="animation-demo">
+                        <div class="anim-box float-anim">float</div>
+                    </div>
+                </div>
+
+                <div class="component-group">
+                    <div class="component-label">ホバートランジション一覧</div>
+                    <div style="font-size: 0.9rem; color: var(--color-text-light); line-height: 2;">
+                        <code style="background:#f5f5f5; padding: 0.1rem 0.4rem; border-radius:4px;">.menu-item:hover</code> → translateY(-10px) + border-color: primary + shadow<br>
+                        <code style="background:#f5f5f5; padding: 0.1rem 0.4rem; border-radius:4px;">.btn-primary:hover</code> → translateY(-3px) + shadow強化<br>
+                        <code style="background:#f5f5f5; padding: 0.1rem 0.4rem; border-radius:4px;">.gallery-item:hover</code> → img scale(1.1) + グラデーションオーバーレイ<br>
+                        <code style="background:#f5f5f5; padding: 0.1rem 0.4rem; border-radius:4px;">.nav-links a:hover::after</code> → width: 100%（アンダーラインスライド）
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+</body>
+</html>

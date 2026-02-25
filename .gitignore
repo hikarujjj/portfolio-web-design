@@ -54,3 +54,6 @@ bower_components/
 .env
 .env.local
 .env.*.local
+
+# シンボリックリンク
+screenshots
